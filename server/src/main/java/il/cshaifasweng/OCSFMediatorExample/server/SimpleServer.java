@@ -62,10 +62,9 @@ public class SimpleServer extends AbstractServer {
 			}
 			else if (request.equals("what’s the time?")) {
 
-				LocalDateTime formatter=message.getTimeStamp();
 				DateTimeFormatter dateFormat=DateTimeFormatter.ofPattern("HH:mm:ss");
-				String currentTime= formatter.format(dateFormat);
-				message.setMessage(currentTime);
+				LocalDateTime time_1=message.getTimeStamp();
+				message.setMessage(time_1.format(dateFormat));
 				client.sendToClient(message);
 
 			}
@@ -74,10 +73,9 @@ public class SimpleServer extends AbstractServer {
 				//(use substring method as shown above)
 				//message format: "multiply n*m"
 				String messExp=message.getMessage();
-				String[] arrofExp= messExp.substring(9).split("\\*");
-				int firstNum=Integer.parseInt(arrofExp[0].trim());
-				int secNum=Integer.parseInt(arrofExp[1].trim());
-				int mulRes= firstNum * secNum;
+				String arrofExp= messExp.substring(9);
+				String[] arayofMul = arrofExp.split("\\*");
+				int mulRes=Integer.parseInt(arayofMul[0].trim()) * Integer.parseInt(arayofMul[1].trim());
 				message.setMessage(Integer.toString(mulRes));
 				client.sendToClient(message);
 
