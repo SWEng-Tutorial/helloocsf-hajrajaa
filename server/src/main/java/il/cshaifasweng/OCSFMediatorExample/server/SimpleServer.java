@@ -6,6 +6,9 @@ import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.SubscribedClient;
 
 import java.io.IOException;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class SimpleServer extends AbstractServer {
@@ -48,18 +51,36 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}
 			else if(request.startsWith("send Submitters IDs")){
-				//add code here to send submitters IDs to client
+
+				message.setMessage("322512690, 323088773");
+				client.sendToClient(message);
 			}
 			else if (request.startsWith("send Submitters")){
-				//add code here to send submitters names to client
+
+				message.setMessage("Rajaa, Thomas");
+				client.sendToClient(message);
 			}
 			else if (request.equals("what’s the time?")) {
-				//add code here to send the time to client
+
+				LocalDateTime formatter=message.getTimeStamp();
+				DateTimeFormatter dateFormat=DateTimeFormatter.ofPattern("HH:mm:ss");
+				String currentTime= formatter.format(dateFormat);
+				message.setMessage(currentTime);
+				client.sendToClient(message);
+
 			}
 			else if (request.startsWith("multiply")){
 				//add code here to multiply 2 numbers received in the message and send result back to client
 				//(use substring method as shown above)
 				//message format: "multiply n*m"
+				String messExp=message.getMessage();
+				String[] arrofExp= messExp.substring(9).split("\\*");
+				int firstNum=Integer.parseInt(arrofExp[0].trim());
+				int secNum=Integer.parseInt(arrofExp[1].trim());
+				int mulRes= firstNum * secNum;
+				message.setMessage(Integer.toString(mulRes));
+				client.sendToClient(message);
+
 			}else{
 				//add code here to send received message to all clients.
 				//The string we received in the message is the message we will send back to all clients subscribed.
@@ -67,6 +88,7 @@ public class SimpleServer extends AbstractServer {
 					// message received: "Good morning"
 					// message sent: "Good morning"
 				//see code for changing submitters IDs for help
+				sendToAllClients(message);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
